@@ -86,3 +86,11 @@ export const AvatarUsers = styled.img`
 border: solid 3px #ff548f;
 border-radius: 50%;
 height: 60px;`
+
+export const DeleteMessage = styled.p`
+  color: #ff548f ;
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 15px;
+  text-align: center;
+`;
