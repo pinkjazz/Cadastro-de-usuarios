@@ -1,22 +1,21 @@
 import TopBackground from '../../components/TopBackground';
 import Button from '../../components/Button';
 import { Container } from '../../components/GContainer';
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom';
 import { Titlelist, ContainerUsers, CardUsers, TrashIcon, AvatarUsers, DeleteMessage } from './styles.js';
-import api from '../../services/api.js'
+import api from '../../services/api.js';
 import { useEffect, useState } from 'react';
-import Trash from '../../assets/trash.svg'
+import Trash from '../../assets/trash.svg';
 
 function ListUsers() {
     const navigate = useNavigate();
     const [users, setUsers] = useState([]);
-
+    const [success, setSuccess] = useState(false); // Adicionando o estado success
 
     useEffect(() => {
         const getUsers = async () => {
             const { data } = await api.get('/usuarios');
             console.log(data);
-
             setUsers(data);
         };
         getUsers();
@@ -26,7 +25,6 @@ function ListUsers() {
         await api.delete(`/usuarios/${id}`);
         setUsers(users.filter(user => user.id !== id));
 
-        
         // Exibir mensagem de sucesso
         setSuccess(true);
         
@@ -34,7 +32,6 @@ function ListUsers() {
         setTimeout(() => {
             setSuccess(false);
         }, 3000);
-
     }
 
     return (
@@ -42,26 +39,23 @@ function ListUsers() {
             <TopBackground />
             <Titlelist> Listagem de Usuários</Titlelist>
 
-        {success && <DeleteMessage>Usuário excluído com sucesso</DeleteMessage>}
+            {success && <DeleteMessage>Usuário excluído com sucesso</DeleteMessage>}
             <ContainerUsers>
-
-                {users.map(user =>
+                {users.map(user => (
                     <CardUsers key={user.id}>
                         <AvatarUsers src={`https://avatar.iran.liara.run/public?username=${user.id}`} />
                         <div>
                             <h3>{user.name}</h3>
-                            <p> {user.email}</p>
-                            <p> {user.age} anos</p>
+                            <p>{user.email}</p>
+                            <p>{user.age} anos</p>
                         </div>
                         <TrashIcon src={Trash} alt="Trash-Icon" onClick={() => deleteUsers(user.id)} />
-
                     </CardUsers>
-                )}
+                ))}
             </ContainerUsers>
             <Button type="button" onClick={() => navigate('/')}>Voltar</Button>
-
         </Container>
-    )
+    );
 }
 
 export default ListUsers;
